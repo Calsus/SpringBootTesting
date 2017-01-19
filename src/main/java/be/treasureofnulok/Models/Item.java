@@ -17,9 +17,9 @@ public class Item implements Serializable {
     @Id
     @GeneratedValue
     @Getter
-    private Long id;
+    private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Setter
     @Getter
     private String name;
@@ -27,25 +27,16 @@ public class Item implements Serializable {
     @Column(nullable = false)
     @Setter
     @Getter
-    private String rarity;
+    @Enumerated(EnumType.STRING)
+    private Rarity rarity;
 
-    @ManyToMany(mappedBy = "items")
-    @Getter
-    private List<Player> players;
-
-    protected Item(){
+    public Item(){
 
     }
 
-    public Item(String name, String rarity) {
+    public Item(String name, Rarity rarity) {
         this.name = name;
         this.rarity = rarity;
-        this.players = new ArrayList<>();
-    }
-
-    public Item linkToPlayer(Player player) {
-        this.players.add(player);
-        return this;
     }
 
     @Override
@@ -54,6 +45,7 @@ public class Item implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", rarity='" + rarity + '\'' +
+
                 '}';
     }
 }

@@ -1,21 +1,18 @@
 package be.treasureofnulok.Repositories;
 
 import be.treasureofnulok.Models.Item;
-import be.treasureofnulok.Models.Player;
 import be.treasureofnulok.Models.Race;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by Jerry-Lee on 18/01/2017.
  */
-public interface PlayerRepository extends JpaRepository<Player,Long> {
-    Page<Player> findAll(Pageable pageable);
-    Player findByNameIgnoringCase(String name);
-    Player findPlayerById(Long id);
-    List<Player> findPlayersByRace(Race race);
+public interface RaceRepository extends JpaRepository<Race,Long> {
+    Page<Race> findAll(Pageable pageable);
+    Race findByNameIgnoringCase(String name);
+    Race findRaceById(Long id);
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +13,13 @@ import java.util.List;
  * Created by Jerry-Lee on 18/01/2017.
  */
 @Entity
-public class Player {
+public class Player implements Serializable {
     @Id
     @GeneratedValue
     @Getter
-    private Long id;
+    private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Setter
     @Getter
     private String name;
@@ -28,37 +29,18 @@ public class Player {
     @Getter
     private String gender;
 
-    @Column(nullable = false)
-    @Setter
-    @Getter
-    private String race;
+    @ManyToOne
+    @JoinColumn(name="race_id", nullable = false)
+    private Race race;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="player_item",
-            joinColumns = @JoinColumn(name="player_id", referencedColumnName = "id", nullable =  false),
-            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id", nullable =  false))
-    @Getter
-    private List<Item> items;
-
-    protected Player(){
+    public Player(){
 
     }
 
-    public Player(String name, String gender, String race) {
+    public Player(String name, String gender, Race race) {
         this.name = name;
         this.gender = gender;
         this.race = race;
-        this.items = new ArrayList<>();
-    }
-
-    public Player addItem(Item item) {
-        item.linkToPlayer(this);
-        this.items.add(item);
-        return this;
-    }
-    public Player addItems(List<Item> items) {
-        items.forEach(item -> this.addItem(item));
-        return this;
     }
 
     @Override
@@ -67,7 +49,7 @@ public class Player {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
-                ", race='" + race + '\'' +
+                ", race=" + race +
                 '}';
     }
 }
